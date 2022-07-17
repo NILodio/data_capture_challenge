@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from models.config import MAX_VALUE
 from typing import Iterable
 
 @dataclass()
@@ -34,7 +35,7 @@ class CapturedCollection:
         return self
 
     def __next__(self) -> CapturedNumber:
-        while self.current_iteration < 999:
+        while self.current_iteration < MAX_VALUE:
             self.current_iteration += 1
             if self.current_iteration not in self.collection:
                 return CapturedNumber(self.current_iteration)
@@ -48,13 +49,13 @@ class CapturedCollection:
         return repr(self.collection)
 
     def __setitem__(self, key: int, value: CapturedNumber) -> None:
-        if key < 1 or key > 999:
-            raise ValueError("Error {}".format(number=key))
+        if key < 1 or key > MAX_VALUE:
+            raise ValueError("The number {number} is not in the range of 1 to {max_value}".format(number=key , max_value=MAX_VALUE))
         self.collection[key] = value
 
     def __getitem__(self, key: int) -> CapturedNumber:
-        if key < 1 or key > 999:
-            raise ValueError("Error {}".format(number=key))
+        if key < 1 or key > MAX_VALUE:
+            raise ValueError("The number {number} is not in the range of 1 to {max_value}".format(number=key , max_value=MAX_VALUE))
         if key not in self.collection:
             self.collection[key] = CapturedNumber(key)
         return self.collection[key]

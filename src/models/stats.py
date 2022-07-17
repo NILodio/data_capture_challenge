@@ -4,6 +4,7 @@ from typing import Iterable
 from models.captured import CapturedNumber , CapturedCollection
 
 
+
 class Stats:
     def __init__(self, count: int) -> None:
         self._data: CapturedCollection = CapturedCollection()
