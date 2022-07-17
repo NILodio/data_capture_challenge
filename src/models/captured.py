@@ -62,3 +62,6 @@ class CapturedCollection:
 
     def keys(self) -> Iterable[int]:
         return self.collection.keys()
+    
+    def __len__(self) -> int:
+        return len(self.collection)
