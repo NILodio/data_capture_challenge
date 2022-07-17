@@ -24,7 +24,7 @@ constant time O(1)
 ## Setup
 
 - Clone the repo.
-- Create a virtual environment `pienv install`.
+- Create a virtual environment `pipenv install`.
 - Activate it.
 
 ## Usage
