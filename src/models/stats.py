@@ -1,33 +1,47 @@
-from re import I
-from models.captured import CapturedCollection , CapturedN
+import re
 from typing import Iterable
 
+from models.captured import CapturedNumber , CapturedCollection
+
+
 class Stats:
-
-    def __init__(self , count : int) -> None:
-
+    def __init__(self, count: int) -> None:
         self._data: CapturedCollection = CapturedCollection()
-        self._count : int = count
-    
+        self._count: int = count
+
     def __repr__(self) -> str:
         return f"Stats(stats={[repr(self._data)]}, count={self._count})"
-    
-    def keys(self) -> Iterable[int]:
-        return self._data.keys()
-    
-    def greater(self, number: int) -> int:
-        return self._data[number].greater
 
-    def less(self, number: int) -> int:
-        return self._data[number].less
+    def __setitem__(self, key: int, item: CapturedNumber) -> None:
+        self._data[key] = item
+
+    def __getitem__(self, key: int) -> CapturedNumber:
+        return self._data[key]
 
     @property
-    def count(self)-> int:
+    def count(self) -> int:
         return self._count
 
     @property
-    def data(self)-> CapturedCollection:
+    def data(self) -> CapturedCollection:
         return self._data
+
+    def between(self, a: int, b: int) -> int:
+        if a < b:
+            lowest, highest = a, b
+        else:
+            lowest, highest = b, a
+
+        return self._count - self._data[lowest].less - self._data[highest].greater
+
+    def greater(self, number: int) -> int:
+        return self._data[number].greater
+
+    def keys(self) -> Iterable[int]:
+        return self._data.keys()
+
+    def less(self, number: int) -> int:
+        return self._data[number].less
 
 
 class DataCapture:
@@ -36,12 +50,11 @@ class DataCapture:
         self.data: CapturedCollection = CapturedCollection()
 
     def add(self, number: int) -> None:
-
         if number not in self.data.keys():
-            self.data[number] = CapturedN(number)
+            self.data[number] = CapturedNumber(number)
         self.data[number].count += 1
         self.count += 1
-    
+
     def build_stats(self) -> Stats:
         stats: Stats = Stats(self.count)
         less: int = 0
